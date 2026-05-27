@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum SubmissionStatus {
+  pending
+  token_sent
+  completed
+}
+
+model Submission {
+  id           String           @id @default(cuid())
+  responseKey  String           @unique
+  name         String
+  phone        String
+  isJain       Boolean
+  dozens       Int
+  amount       Int
+  tokenNumber  String?          @unique
+  status       SubmissionStatus @default(pending)
+  notes        String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model Counter {
+  id        String @id
+  value     Int    @default(0)
+  updatedAt DateTime @updatedAt
+}

@@ -1,19 +1,29 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Role = "admin" | "viewer";
 
 export default function LoginPage() {
   const router = useRouter();
-  const params = useSearchParams();
   const [role, setRole] = useState<Role>("viewer");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [nextPath, setNextPath] = useState("/");
 
-  const nextPath = params.get("next") || "/";
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get("next");
+      if (next && next.startsWith("/")) {
+        setNextPath(next);
+      }
+    } catch {
+      setNextPath("/");
+    }
+  }, []);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

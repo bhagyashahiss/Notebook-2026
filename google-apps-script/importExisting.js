@@ -5,8 +5,8 @@
  *   1. Open your Google Form's response spreadsheet
  *   2. Go to Extensions → Apps Script
  *   3. Paste this code in a new file (e.g. importExisting.gs)
- *   4. Replace WEBHOOK_URL with your deployed app URL
- *   5. Replace WEBHOOK_SECRET with your APP_WEBHOOK_SECRET
+ *   4. Replace IMPORT_URL with your deployed app URL
+ *   5. Replace IMPORT_SECRET with your APP_WEBHOOK_SECRET
  *   6. Run the function `importAllExistingResponses`
  *   7. Check the Execution Log for results
  */
@@ -15,6 +15,14 @@ const IMPORT_URL = "https://YOUR_DEPLOYED_APP.vercel.app/api/import";
 const IMPORT_SECRET = "YOUR_APP_WEBHOOK_SECRET";
 
 function importAllExistingResponses() {
+  if (IMPORT_URL.indexOf("YOUR_DEPLOYED_APP") !== -1) {
+    throw new Error("Set IMPORT_URL before running import.");
+  }
+
+  if (IMPORT_SECRET === "YOUR_APP_WEBHOOK_SECRET") {
+    throw new Error("Set IMPORT_SECRET before running import.");
+  }
+
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
   var data = sheet.getDataRange().getValues();
   var headers = data[0];
@@ -28,7 +36,20 @@ function importAllExistingResponses() {
       if (value instanceof Date) {
         value = value.toISOString();
       }
-      row[headers[j]] = value;
+
+      var baseKey = String(headers[j] || "").trim();
+      if (!baseKey) {
+        baseKey = "Column " + (j + 1);
+      }
+
+      var key = baseKey;
+      var suffix = 2;
+      while (Object.prototype.hasOwnProperty.call(row, key)) {
+        key = baseKey + " " + suffix;
+        suffix++;
+      }
+
+      row[key] = value;
     }
     rows.push(row);
   }
@@ -51,7 +72,23 @@ function importAllExistingResponses() {
     };
 
     var response = UrlFetchApp.fetch(IMPORT_URL, options);
-    var result = JSON.parse(response.getContentText());
+    var statusCode = response.getResponseCode();
+    var responseText = response.getContentText();
+    var result;
+
+    try {
+      result = JSON.parse(responseText);
+    } catch (error) {
+      Logger.log("Batch " + (Math.floor(start / batchSize) + 1) + " parse error.");
+      Logger.log("HTTP " + statusCode + " response: " + (responseText || "<empty response body>"));
+      throw new Error("Import API returned non-JSON response. Check IMPORT_URL and Vercel logs.");
+    }
+
+    if (statusCode < 200 || statusCode >= 300) {
+      Logger.log("Batch " + (Math.floor(start / batchSize) + 1) + " failed with HTTP " + statusCode);
+      Logger.log("Response: " + responseText);
+      throw new Error("Import API request failed with HTTP " + statusCode);
+    }
 
     Logger.log(
       "Batch " + (Math.floor(start / batchSize) + 1) + 

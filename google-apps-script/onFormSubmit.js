@@ -21,7 +21,19 @@ function onFormSubmit(e) {
 
   var payload = {};
   for (var i = 0; i < headers.length; i++) {
-    payload[headers[i]] = values[i];
+    var baseKey = String(headers[i] || "").trim();
+    if (!baseKey) {
+      baseKey = "Column " + (i + 1);
+    }
+
+    var key = baseKey;
+    var suffix = 2;
+    while (Object.prototype.hasOwnProperty.call(payload, key)) {
+      key = baseKey + " " + suffix;
+      suffix++;
+    }
+
+    payload[key] = values[i];
   }
 
   // Ensure Timestamp is a string

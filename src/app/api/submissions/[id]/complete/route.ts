@@ -29,11 +29,16 @@ export async function PATCH(
     return NextResponse.json({ ok: true, alreadyCompleted: true });
   }
 
+  const paymentNote = `Payment Mode: ${parsed.data.paymentMode}`;
+  const customNote = (parsed.data.notes ?? "").trim();
+  const previousNote = (submission.notes ?? "").trim();
+  const mergedNotes = [paymentNote, customNote, previousNote].filter(Boolean).join(" | ");
+
   const updated = await prisma.submission.update({
     where: { id },
     data: {
       status: "completed",
-      notes: parsed.data.notes ?? submission.notes,
+      notes: mergedNotes || null,
     },
   });
 

@@ -14,6 +14,14 @@ export const markCompleteSchema = z.object({
   paymentMode: z.enum(["CASH", "UPI"]).default("CASH"),
 });
 
+export const manualSubmissionSchema = z.object({
+  name: z.string().min(1),
+  phone: z.string().min(10),
+  isJain: z.boolean(),
+  dozens: z.number().int().positive(),
+  notes: z.string().optional(),
+});
+
 export type FormSubmissionPayload = z.infer<typeof formSubmissionSchema>;
 
 type UnknownRecord = Record<string, unknown>;
@@ -58,6 +66,22 @@ function parseDozens(primary: string, secondary: string): number | null {
     }
   }
   return null;
+}
+
+function parseJain(value: string): boolean {
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return false;
+
+  if (
+    normalized === "yes" ||
+    normalized === "y" ||
+    normalized === "true" ||
+    normalized === "1"
+  ) {
+    return true;
+  }
+
+  return normalized.includes("yes") || normalized.includes("jain");
 }
 
 export function normalizeFormPayload(input: unknown):
@@ -106,7 +130,7 @@ export function normalizeFormPayload(input: unknown):
   }
 
   const name = [firstName, middleName, lastName].filter(Boolean).join(" ");
-  const isJain = jainRaw === "yes" || jainRaw === "true";
+  const isJain = parseJain(jainRaw);
   const responseKey = [timestamp, phone, email || name].filter(Boolean).join("|");
   const notes = [
     email ? `Email: ${email}` : "",

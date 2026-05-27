@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import AppSidebar from "@/components/app-sidebar";
 import type { SubmissionRecord } from "@/types/submission";
 
 type Segment = {
@@ -266,45 +266,13 @@ export default function SummaryPage() {
   }, [rows]);
 
   return (
-    <main className="mx-auto min-h-screen max-w-7xl bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.12),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(249,115,22,0.13),transparent_32%)] px-4 py-8 sm:px-6 lg:px-8">
+    <>
+      <AppSidebar />
+      <main className="mx-auto min-h-screen max-w-7xl bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.12),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(249,115,22,0.13),transparent_32%)] px-4 py-8 pl-14 sm:px-6 sm:pl-16 lg:px-8 lg:pl-20">
       <section className="mb-6 rounded-3xl border border-slate-200/70 bg-white/95 p-6 shadow-lg shadow-slate-200/50 backdrop-blur">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-3xl font-black tracking-tight text-slate-900">Event Summary</h1>
-            <p className="mt-1 text-sm text-slate-600">Live analytics for bookings, books, and collections.</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href="/manual-entry"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Manual Entry
-            </Link>
-            <Link
-              href="/undo"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Undo
-            </Link>
-            <Link
-              href="/update-phone"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Update Phone
-            </Link>
-            <Link
-              href="/"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Back To Dashboard
-            </Link>
-            <a
-              href="/api/auth/logout"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Logout
-            </a>
-          </div>
+        <div>
+          <h1 className="text-3xl font-black tracking-tight text-slate-900">Event Summary</h1>
+          <p className="mt-1 text-sm text-slate-600">Live analytics for bookings, books, and collections.</p>
         </div>
 
         {!loading ? (
@@ -370,6 +338,7 @@ export default function SummaryPage() {
           </div>
         </div>
       )}
-    </main>
+      </main>
+    </>
   );
 }

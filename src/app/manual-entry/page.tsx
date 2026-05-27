@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import AppSidebar from "@/components/app-sidebar";
 
 type SubmitState = {
   loading: boolean;
@@ -90,43 +90,11 @@ export default function ManualEntryPage() {
   };
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+    <>
+      <AppSidebar />
+      <main className="mx-auto min-h-screen max-w-3xl px-4 py-8 pl-14 sm:px-6 sm:pl-16 lg:px-8 lg:pl-20">
       <section className="card mb-6 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-2xl font-bold">Manual Entry</h1>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href="/"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/undo"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Undo
-            </Link>
-            <Link
-              href="/update-phone"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Update Phone
-            </Link>
-            <Link
-              href="/summary"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Summary
-            </Link>
-            <a
-              href="/api/auth/logout"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Logout
-            </a>
-          </div>
-        </div>
+        <h1 className="text-2xl font-bold">Manual Entry</h1>
         <p className="mt-2 text-sm text-slate-600">
           Add a submission directly from app without filling Google Form.
         </p>
@@ -204,6 +172,7 @@ export default function ManualEntryPage() {
           </button>
         </form>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import AppSidebar from "@/components/app-sidebar";
 
 type UndoState = {
   loading: boolean;
@@ -82,43 +82,11 @@ export default function UndoPage() {
   };
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+    <>
+      <AppSidebar />
+      <main className="mx-auto min-h-screen max-w-3xl px-4 py-8 pl-14 sm:px-6 sm:pl-16 lg:px-8 lg:pl-20">
       <section className="card mb-6 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-2xl font-bold">Undo Operation</h1>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href="/"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/manual-entry"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Manual Entry
-            </Link>
-            <Link
-              href="/summary"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Summary
-            </Link>
-            <Link
-              href="/update-phone"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Update Phone
-            </Link>
-            <a
-              href="/api/auth/logout"
-              className="rounded-md bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200"
-            >
-              Logout
-            </a>
-          </div>
-        </div>
+        <h1 className="text-2xl font-bold">Undo Operation</h1>
         <p className="mt-2 text-sm text-slate-600">
           Enter token number to revert a submission from completed/token_sent back to pending.
         </p>
@@ -151,6 +119,7 @@ export default function UndoPage() {
           </button>
         </form>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

@@ -15,18 +15,23 @@ export function buildTokenMessage(params: {
   venue: string;
   contact: string;
 }): string {
+  const qtyLabel = params.dozens === 1 ? "dozen" : "dozens";
+
   return [
     `🙏 Jai Jinendra ${params.name}!`,
     ``,
-    `Your notebook booking is confirmed.`,
-    ``,
     `📋 *Token Number:* ${params.tokenNumber}`,
-    `📚 *Quantity:* ${params.dozens} dozen`,
+    `📚 *Quantity:* ${params.dozens} ${qtyLabel}`,
     `💰 *Amount:* Rs ${params.amount}`,
     ``,
     `📅 *Date:* ${params.date}`,
     `🕐 *Time:* ${params.time}`,
     `📍 *Venue:* ${params.venue}`,
+    `https://share.google/hXQ1ZwG4PTujkBQWK`,
+    ``,
+    `*Note:*`,
+    `👉🏻Notebook shall be available on first come first serve baais`,
+    `👉🏻Notebook shall be available till the stock last`,
     ``,
     `Please carry exact cash. For queries contact:`,
     `${params.contact}`,
